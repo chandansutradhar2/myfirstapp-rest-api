@@ -1,6 +1,14 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const { MongoClient } = require("mongodb");
+
+const url =
+	"mongodb+srv://admin:hisyCn%24AhkX5Ggz@lab-cluster-1.ihxrn.mongodb.net/test?authSource=admin&replicaSet=atlas-nmhvza-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true";
+const client = new MongoClient(url);
+const dbName = "shopping-app";
+
+app.use(express.json());
 
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -28,8 +36,30 @@ app.get("/", (req, res) => {
 	res.send("Hello World!");
 });
 
+app.post("/api/user/login", async (req, res) => {
+	//TODO connect to mongoclient and send
+	await client.connect();
+	console.log("Connected successfully to server");
+	const db = client.db(dbName);
+	db.collection("users")
+		.findOne({
+			email: req.body.email,
+			password: req.body.password,
+		})
+		.then((result) => {
+			if (result) {
+				console.log(result);
+				return res.send({ result: true, token: "7y73hf78383n383xn" });
+			} else {
+				return res.send({ result: false, message: "invalid credentials" });
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+});
+
 app.get("/api/heroes/all", (req, res) => {
-	//todo database code to fetch from db
 	setTimeout(() => {
 		res.send(heroes);
 	}, 3000);

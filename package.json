@@ -9,6 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3"
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.3",
+    "mongodb": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.25"
   }
 }
